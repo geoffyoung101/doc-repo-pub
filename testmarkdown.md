@@ -30,6 +30,7 @@ This is a link reference [Link to BBC] (http://www.bbc.co.uk)
 - [ ] Push my commits to GitHub
 - [ ] Open a pull request
 
+---
 
 If you want to embed images, this is how you do it:
 
