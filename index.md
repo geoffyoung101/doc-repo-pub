@@ -37,7 +37,7 @@ Provides a list of key activities to prepare for Windows 10
 ### Audience
 This document is intended for use by experienced IT managers and as such assumes a prior understanding of managing a large (1000+ device) Windows estate.  
 ### Implementation Principles
-- At a high-level, the following outlines the Microsoft recommended goals for NHS to adopt Windows 10:
+At a high-level, the following outlines the Microsoft recommended goals for NHS to adopt Windows 10:
 - Develop a centralised application catalogue to consolidate information about applications and their usage in your organisation
 - Enrol in Windows Analytics Upgrade Readiness to help plan and manage your upgrade project
 - Utilise Windows Analytics Upgrade Readiness workflow framework to drive Windows 10 upgrade process
