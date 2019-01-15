@@ -55,7 +55,6 @@ The aim of this guide is to help explain the background to WaaS and to help you 
 
 Windows 10 gains new functionality with twice-per-year feature update releases. The following graphic shows the rapid rate at which new features are introduced with each new version:
 
-![image](https://github.com/geoffyoung101/doc-repo/blob/master/eachrelease.jpg)
 
 ![W10 releases](https://geoffyoung101.github.io/doc-repo/eachrelease.jpg)
 
