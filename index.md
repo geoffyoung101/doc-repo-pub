@@ -57,6 +57,7 @@ Windows 10 gains new functionality with twice-per-year feature update releases. 
 
 ![image](https://github.com/geoffyoung101/doc-repo/blob/master/eachrelease.jpg)
 
+![W10 releases](https://geoffyoung101.github.io/doc-repo/eachrelease.jpg)
 
 
 
