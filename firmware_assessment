@@ -1,0 +1,47 @@
+// Simple query to pull the Device TVM Hardware and Firmware table.
+// The additional fields are expanded out to make the results easier to digest.
+
+DeviceTvmHardwareFirmware
+| extend info = parse_json(AdditionalFields)
+| extend SystemSKU = tostring(info.SystemSKU)
+| extend BaseBoardManufacturer = tostring(info.BaseBoardManufacturer)
+| extend BaseBoardProduct = tostring(info.BaseBoardProduct)
+| extend BaseBoardVersion = tostring(info.BaseBoardVersion)
+| extend DeviceFamily = tostring(info.DeviceFamily)
+| extend SystemFamily = tostring(info.SystemFamily)
+| extend BIOSReleaseDate = tostring(info.BIOSReleaseDate)
+| extend BIOSLastDetected = tostring(info.BIOSLastDetected)
+| extend ThreadsCount = tostring(info.ThreadsCount)
+| extend Family = tostring(info.Family)
+| project-away DeviceName, AdditionalFields, info
+
+// More advanced version of the above query which joins the hardware and processor data to form a single record per device.
+
+let hardware = DeviceTvmHardwareFirmware
+| where ComponentType == "Hardware"
+| extend info = parse_json(AdditionalFields)
+| extend SystemSKU = tostring(info.SystemSKU)
+| extend BaseBoardManufacturer = tostring(info.BaseBoardManufacturer)
+| extend BaseBoardProduct = tostring(info.BaseBoardProduct)
+| extend BaseBoardVersion = tostring(info.BaseBoardVersion)
+| extend DeviceFamily = tostring(info.DeviceFamily)
+| extend SystemFamily = tostring(info.SystemFamily)
+| extend ThreadsCount = tostring(info.ThreadsCount)
+| extend Family = tostring(info.Family)
+| project-away DeviceName, AdditionalFields, info;
+let processors = DeviceTvmHardwareFirmware
+| where ComponentType == "Processor"
+| extend info = parse_json(AdditionalFields)
+| extend SystemSKU = tostring(info.SystemSKU)
+| extend BaseBoardManufacturer = tostring(info.BaseBoardManufacturer)
+| extend BaseBoardProduct = tostring(info.BaseBoardProduct)
+| extend BaseBoardVersion = tostring(info.BaseBoardVersion)
+| extend DeviceFamily = tostring(info.DeviceFamily)
+| extend SystemFamily = tostring(info.SystemFamily)
+| extend ThreadsCount = tostring(info.ThreadsCount)
+| extend Family = tostring(info.Family)
+| project-away DeviceName, AdditionalFields, info;
+hardware
+| join kind=inner(processors) on DeviceId
+| project DeviceId, ComponentType, Manufacturer, ComponentName,  ComponentVersion, SystemSKU, BaseBoardManufacturer, BaseBoardProduct, BaseBoardVersion, DeviceFamily, SystemFamily,
+     Proc_Manufacturer = Manufacturer1, Proc_ComponentName = ComponentName1, Proc_ThreadsCount = ThreadsCount1, Proc_Family = Family1
