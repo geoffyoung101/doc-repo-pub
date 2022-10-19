@@ -1,0 +1,31 @@
+// This query looks the the MDE client version for Server 2012R2 and 2016 and determines whether it is running MMA or the Universal Agent.
+// The results are broken out by Device Group as that suited my use-case and the query can be easily tweaked to summarise for all Device Groups.
+
+let MMAVersions = datatable(mmaver:string,mmadate:string)
+["10.20.18067.0", "Mar-22",
+"10.20.18064.0","Dec-21",
+"10.20.18062.0","Nov-21",
+"10.20.18053.0","Oct-20",
+"10.20.18040.0","Aug-20",
+"10.20.18038.0","Apr-20",
+"10.20.18029.0","Mar-20",
+"10.20.18018.0","Oct-19",
+"10.20.18011.0","Jul-19",
+"10.20.18001.0","Jun-19",
+"10.19.13515.0","Mar-19",
+"10.19.10006.0","Dec-18",
+"8.0.11136.0","Sep-18",
+"8.0.11103.0","Apr-18",
+"8.0.11081.0","Nov-17",
+"8.0.11072.0","Sep-17",
+"8.0.11049.0","Feb-17"];
+DeviceTvmSoftwareInventory
+| where SoftwareName == "monitoring_agent"
+| join kind=inner (DeviceInfo | where isnotnull(OSBuild)) on DeviceId
+| distinct RegistryDeviceTag, MachineGroup, OSPlatform, SoftwareVersion, DeviceName
+| extend mma_ver_detail = split(SoftwareVersion,".")
+| extend mma_ver = strcat(tostring(mma_ver_detail[0]),".",tostring(mma_ver_detail[1]))
+| extend mma_build = tostring(mma_ver_detail[2])
+| summarize devices = dcount(DeviceName) by RegistryDeviceTag, MachineGroup, OSPlatform, SoftwareVersion, mma_ver, mma_build
+| join kind=leftouter (MMAVersions) on $left.SoftwareVersion == $right.mmaver
+| project MachineGroup, OSPlatform, SoftwareVersion, mma_ver, mma_build, mmadate, devices
