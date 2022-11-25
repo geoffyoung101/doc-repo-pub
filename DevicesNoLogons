@@ -1,0 +1,9 @@
+// Query to find machines that haven't had a logon event in the time period
+// Written in response to a request to be able to identify devices that are not being used
+DeviceInfo
+| where OnboardingStatus == "Onboarded" and isnotempty(OSPlatform)
+| where MachineGroup == "UnassignedGroup" // set the target device group here if you need to
+| join kind=leftouter (DeviceLogonEvents) on DeviceId
+| where isempty(ActionType)
+//| summarize dcount(DeviceId), dcount(DeviceId1), dcount(AccountName) by ActionType
+| distinct ActionType, DeviceId, DeviceId1, DeviceName, MachineGroup, AccountName
